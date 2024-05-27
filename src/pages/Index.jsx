@@ -1,7 +1,7 @@
 import { Box, Button, Container, Flex, Heading, HStack, IconButton, Image, Link, Stack, Text, VStack } from "@chakra-ui/react";
 import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 const Index = () => {
   const [events, setEvents] = useState([]);
@@ -10,6 +10,17 @@ const Index = () => {
     const storedEvents = JSON.parse(localStorage.getItem("events")) || [];
     setEvents(storedEvents);
   }, []);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedEvents = JSON.parse(localStorage.getItem("events")) || [];
+    setEvents(storedEvents);
+  }, []);
+
+  const handleBookTickets = (event) => {
+    navigate(`/book-tickets/${event.name}`);
+  };
+
   return (
     <Container maxW="container.xl" p={0}>
       {/* Navigation Bar */}
@@ -53,6 +64,7 @@ const Index = () => {
                 <Text mt={2}>{event.date}</Text>
                 <Text mt={2}>{event.location}</Text>
                 <Text mt={2}>{event.description}</Text>
+                <Button mt={4} colorScheme="teal" onClick={() => handleBookTickets(event)}>Book Tickets</Button>
               </Box>
             </Box>
           ))}
