@@ -1,15 +1,23 @@
 import { Box, Button, Container, Flex, Heading, HStack, IconButton, Image, Link, Stack, Text, VStack } from "@chakra-ui/react";
 import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 
 const Index = () => {
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    const storedEvents = JSON.parse(localStorage.getItem("events")) || [];
+    setEvents(storedEvents);
+  }, []);
   return (
     <Container maxW="container.xl" p={0}>
       {/* Navigation Bar */}
       <Flex as="nav" bg="blue.800" color="white" p={4} justifyContent="space-between" alignItems="center">
         <Heading size="md">EventManager</Heading>
         <HStack spacing={8}>
-          <Link href="#">Home</Link>
-          <Link href="#">Events</Link>
+          <Link as={RouterLink} to="/">Home</Link>
+          <Link as={RouterLink} to="/create-event">Create Event</Link>
           <Link href="#">Contact</Link>
         </HStack>
       </Flex>
@@ -37,27 +45,17 @@ const Index = () => {
       <Box as="section" py={10} px={4}>
         <Heading size="lg" textAlign="center" mb={6}>Upcoming Events</Heading>
         <Stack direction={["column", "row"]} spacing={8} justifyContent="center">
-          <Box borderWidth="1px" borderRadius="lg" overflow="hidden" width={["100%", "30%"]}>
-            <Image src="https://via.placeholder.com/400x300" alt="Event 1" />
-            <Box p={4}>
-              <Heading size="md">Event 1</Heading>
-              <Text mt={2}>Details about Event 1</Text>
+          {events.map((event, index) => (
+            <Box key={index} borderWidth="1px" borderRadius="lg" overflow="hidden" width={["100%", "30%"]}>
+              <Image src="https://via.placeholder.com/400x300" alt={event.name} />
+              <Box p={4}>
+                <Heading size="md">{event.name}</Heading>
+                <Text mt={2}>{event.date}</Text>
+                <Text mt={2}>{event.location}</Text>
+                <Text mt={2}>{event.description}</Text>
+              </Box>
             </Box>
-          </Box>
-          <Box borderWidth="1px" borderRadius="lg" overflow="hidden" width={["100%", "30%"]}>
-            <Image src="https://via.placeholder.com/400x300" alt="Event 2" />
-            <Box p={4}>
-              <Heading size="md">Event 2</Heading>
-              <Text mt={2}>Details about Event 2</Text>
-            </Box>
-          </Box>
-          <Box borderWidth="1px" borderRadius="lg" overflow="hidden" width={["100%", "30%"]}>
-            <Image src="https://via.placeholder.com/400x300" alt="Event 3" />
-            <Box p={4}>
-              <Heading size="md">Event 3</Heading>
-              <Text mt={2}>Details about Event 3</Text>
-            </Box>
-          </Box>
+          ))}
         </Stack>
       </Box>
 
